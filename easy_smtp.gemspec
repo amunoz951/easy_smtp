@@ -14,6 +14,5 @@ Gem::Specification.new do |spec|
   spec.files         = Dir['LICENSE', 'lib/**/*']
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'net/smtp'
-  spec.add_dependency 'easy_json_config'
+  spec.add_dependency 'easy_json_config', '~> 0'
 end
