@@ -2,7 +2,7 @@ module EasySMTP
   module_function
 
   def config
-    @config ||= EasyJson.config(defaults: defaults)
+    @config ||= EasyJSON.config(defaults: defaults)
   end
 
   def defaults
