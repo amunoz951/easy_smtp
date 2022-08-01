@@ -10,6 +10,7 @@ module EasySMTP
   #   subject: 'Subject of this email',
   #   body: 'Content of the email!',
   #   html_body: '<html><head></head><body>Content of the email in HTML format!</body></html>',
+  #   attachments: ['Array of paths to files']
   # }
   def send_email(email_data)
     smtp_server = EasySMTP.config['smtp']['server']
@@ -38,6 +39,21 @@ module EasySMTP
 
                 #{email_data['html_body'] || email_data['body']}
               MESSAGE_END
+
+    unless email_data['attachments'].nil?
+      email_data['attachments'].each do |attachment_path|
+        file_content = [File.binread(attachment_path)].pack('m') # Encode contents into base64
+        message += <<-ATTACHMENT_END.gsub(leading_horizontal_whitespace, '')
+          --#{part_boundary}
+          Content-Type: application/octet-stream; name="#{File.basename(attachment_path)}"
+          Content-Transfer-Encoding:base64
+          Content-Disposition: attachment; filename="#{File.basename(attachment_path)}"; size=#{File.size(attachment_path)}
+
+          #{file_content}
+        ATTACHMENT_END
+      end
+    end
+    message += "--#{part_boundary}--"
 
     Net::SMTP.start(smtp_server, smtp_port) do |smtp|
       smtp.send_message message, email_data['from_address'], "#{email_data['recipients']};#{email_data['cc_recipients']};#{email_data['bcc_recipients']}".split(';').reject(&:empty?)
