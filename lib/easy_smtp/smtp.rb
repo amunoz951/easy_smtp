@@ -9,12 +9,14 @@ module EasySMTP
   #   from_address: 'fromaddress@mydomain.com',
   #   subject: 'Subject of this email',
   #   body: 'Content of the email!',
-  #   html_body: '<html><head></head><body>Content of the email in HTML format!</body></html>',
+  #   html_body: '<html><head></head><body>Content of the email in HTML format!</body></html>', # (optional)
   #   attachments: ['Array of paths to files']
+  #   server: smtp.somedomain.com, # (optionally override config)
+  #   port: 25, # (optionally override config)
   # }
   def send_email(email_data)
-    smtp_server = EasySMTP.config['smtp']['server']
-    smtp_port = EasySMTP.config['smtp']['port']
+    smtp_server = email_data['server'] || EasySMTP.config['smtp']['server']
+    smtp_port = email_data['port'] || EasySMTP.config['smtp']['port']
     raise "SMTP server missing from config. Add the entry to the #{EasySMTP.config.path} \"smtp\": { \"server\": \"hostname_or_ip\" }" if smtp_server.nil? || smtp_server.empty?
 
     email_data = Hashly.stringify_all_keys(email_data.dup)
