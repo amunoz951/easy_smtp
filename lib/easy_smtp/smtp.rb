@@ -20,6 +20,7 @@ module EasySMTP
               Mime-Version: 1.0
               Content-Type: text/html
               Content-Disposition: inline
+    email_data = Hashly.stringify_all_keys(email_data.dup)
 
               #{email_data['body']}
               MESSAGE_END

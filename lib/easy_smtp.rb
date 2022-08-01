@@ -16,6 +16,7 @@
 # limitations under the License.
 
 require 'net/smtp'
+require 'hashly'
 require 'easy_json_config'
 require_relative 'easy_smtp/config'
 require_relative 'easy_smtp/smtp'
