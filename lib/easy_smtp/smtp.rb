@@ -1,4 +1,6 @@
 module EasySMTP
+  module_function
+
   ### Example parameter for send_email method
   # email_data = {
   #   'recipients' => 'example@recipient.com;somegal@test.com',
@@ -20,6 +22,8 @@ module EasySMTP
               Mime-Version: 1.0
               Content-Type: text/html
               Content-Disposition: inline
+    raise "SMTP server missing from config. Add the entry to the #{EasySMTP.config.path} \"smtp\": { \"server\": \"hostname_or_ip\" }" if smtp_server.nil? || smtp_server.empty?
+
     email_data = Hashly.stringify_all_keys(email_data.dup)
 
               #{email_data['body']}
